@@ -3,11 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { relicAvailability, saints } from "./saints";
-
-function statusClass(status: string) {
-  return status.toLowerCase().replaceAll(" ", "-");
-}
+import { saints } from "./saints";
 
 export default function SaintGallery() {
   const [query, setQuery] = useState("");
@@ -15,24 +11,21 @@ export default function SaintGallery() {
     const term = query.trim().toLocaleLowerCase();
     if (!term) return saints;
 
-    return saints.filter((saint) => {
-      const availability = relicAvailability[saint.status];
-      return [
-        saint.name,
-        saint.shortName,
-        saint.epithet,
-        saint.patronage,
-        availability.cardLabel,
-      ].some((value) => value.toLocaleLowerCase().includes(term));
-    });
+    return saints.filter((saint) =>
+      [saint.name, saint.shortName, saint.epithet, saint.patronage].some((value) =>
+        value.toLocaleLowerCase().includes(term),
+      ),
+    );
   }, [query]);
 
   return (
     <section className="saint-finder" id="saints" aria-labelledby="gallery-title">
       <div className="gallery-heading">
-        <p className="eyebrow">The communion of saints</p>
-        <h1 id="gallery-title">Choose a saint</h1>
-        <p>Match the portrait beside the relic, then tap to pray.</p>
+        <h1 id="gallery-title">The Saints Chapel</h1>
+        <p>
+          “Since we are surrounded by so great a cloud of witnesses…”
+          <cite>Hebrews 12:1</cite>
+        </p>
       </div>
 
       <div className="search-wrap">
@@ -51,36 +44,30 @@ export default function SaintGallery() {
       </div>
 
       {visibleSaints.length ? (
-        <div className="saint-grid" aria-label="Choose a saint">
-          {visibleSaints.map((saint, index) => {
-            const availability = relicAvailability[saint.status];
-            return (
-              <Link
-                className="saint-card"
-                href={`/saints/${saint.slug}`}
-                key={saint.slug}
-                aria-label={`Meet ${saint.name}. ${availability.cardLabel}.`}
-              >
-                <span className={`portrait-ring portrait-ring-${statusClass(saint.status)}`}>
-                  <span className="card-image">
-                    <Image
-                      src={saint.image}
-                      alt={saint.imageAlt}
-                      fill
-                      priority={index < 4}
-                      sizes="(max-width: 520px) 39vw, (max-width: 900px) 20vw, 180px"
-                    />
-                  </span>
+        <div className="saint-grid" aria-label="The Saints Chapel">
+          {visibleSaints.map((saint, index) => (
+            <Link
+              className="saint-card"
+              href={`/saints/${saint.slug}`}
+              key={saint.slug}
+              aria-label={`Meet St. ${saint.shortName}`}
+            >
+              <span className="portrait-ring">
+                <span className="card-image">
+                  <Image
+                    src={saint.image}
+                    alt={saint.imageAlt}
+                    fill
+                    priority={index < 4}
+                    sizes="(max-width: 520px) 39vw, (max-width: 900px) 20vw, 180px"
+                  />
                 </span>
-                <span className="card-copy">
-                  <span className="card-name">{saint.shortName}</span>
-                  <span className={`status status-${statusClass(saint.status)}`}>
-                    <i aria-hidden="true" /> {availability.cardLabel}
-                  </span>
-                </span>
-              </Link>
-            );
-          })}
+              </span>
+              <span className="card-copy">
+                <span className="card-name">St. {saint.shortName}</span>
+              </span>
+            </Link>
+          ))}
         </div>
       ) : (
         <div className="empty-state">
@@ -90,14 +77,6 @@ export default function SaintGallery() {
         </div>
       )}
 
-      <details className="availability-help">
-        <summary>What do the relic labels mean?</summary>
-        <ul>
-          <li><i className="key-confirmed" aria-hidden="true" /> Relic available</li>
-          <li><i className="key-almost" aria-hidden="true" /> Nearly confirmed</li>
-          <li><i className="key-pending" aria-hidden="true" /> Confirmation pending</li>
-        </ul>
-      </details>
     </section>
   );
 }
