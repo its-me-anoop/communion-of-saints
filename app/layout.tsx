@@ -19,13 +19,13 @@ export async function generateMetadata(): Promise<Metadata> {
     openGraph: {
       title: "Relics Exhibition Guide · Jesus Youth UK",
       description: "Find the saint before you · discover their life · pause and pray",
-      images: [{ url: "/og.png", width: 1536, height: 912, alt: "Relics Exhibition Guide by Jesus Youth UK" }],
+      images: [{ url: "/og.jpg", width: 1200, height: 630, alt: "Relics Exhibition Guide by Jesus Youth UK" }],
     },
     twitter: {
       card: "summary_large_image",
       title: "Relics Exhibition Guide · Jesus Youth UK",
       description: "Find the saint before you · discover their life · pause and pray",
-      images: ["/og.png"],
+      images: ["/og.jpg"],
     },
     icons: {
       icon: "/jesus-youth-uk.png",
