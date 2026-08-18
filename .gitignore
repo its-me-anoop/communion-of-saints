@@ -1,0 +1,14 @@
+node_modules/
+.next/
+out/
+dist/
+.vercel
+.wrangler
+.vinext
+.openai
+.playwright-mcp
+.DS_Store
+*.tsbuildinfo
+*.log
+.env*
+coverage/
