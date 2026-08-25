@@ -82,12 +82,15 @@ test("server-renders the exhibition saint finder", async () => {
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
 
   const html = await response.text();
-  assert.match(html, /<title>Relics Exhibition Guide<\/title>/i);
-  assert.match(html, /Jesus Youth UK/);
+  assert.match(html, /<title>The Saints Chapel<\/title>/i);
+  assert.match(html, /Pray with the saints/);
   assert.match(html, /The Saints Chapel/);
+  assert.match(html, /application\/ld\+json/);
+  assert.match(html, /<link rel="canonical" href="https:\/\/communion-of-saints\.vercel\.app"\/>/);
+  assert.match(html, /<meta property="og:url" content="https:\/\/communion-of-saints\.vercel\.app"\/>/);
   assert.match(html, /Since we are surrounded by so great a cloud of witnesses/);
   assert.match(html, /Hebrews 12:1/);
-  assert.doesNotMatch(html, /The communion of saints/i);
+  assert.doesNotMatch(html, />\s*The communion of saints/i);
   assert.doesNotMatch(html, /Choose a saint/);
   assert.doesNotMatch(html, /Match the portrait beside the relic/);
   assert.match(html, /Search the saints/);
@@ -100,14 +103,26 @@ test("server-renders the exhibition saint finder", async () => {
   assert.match(html, /Acts 19:11/);
   assert.match(html, /St\. John Paul II/);
   assert.match(html, /St\. Carlo Acutis/);
-  assert.match(html, /St\. Jacinta &amp; Francisco/);
+  assert.match(html, /Sts\. Jacinta &amp; Francisco/);
   assert.match(html, /St\. Padre Pio/);
+  assert.match(html, /St\. Alphonsa/);
+  assert.match(html, /St\. Euphrasia Eluvathingal/);
   assert.doesNotMatch(html, /What do the relic labels mean/);
   assert.doesNotMatch(html, /Relic available/);
   assert.doesNotMatch(html, /Nearly confirmed/);
   assert.doesNotMatch(html, /Confirmation pending/);
   assert.doesNotMatch(html, /provenance or authentication/i);
   assert.doesNotMatch(html, /codex-preview|react-loading-skeleton|Your site is taking shape/i);
+
+  const forgedHostResponse = await fetch(baseUrl, {
+    headers: {
+      accept: "text/html",
+      "x-forwarded-host": "attacker.example",
+      "x-forwarded-proto": "https",
+    },
+  });
+  const forgedHostHtml = await forgedHostResponse.text();
+  assert.doesNotMatch(forgedHostHtml, /attacker\.example/);
 });
 
 test("server-renders an individual saint life and prayer", async () => {
@@ -117,10 +132,10 @@ test("server-renders an individual saint life and prayer", async () => {
   const html = await response.text();
   assert.match(html, /St\. Carlo Acutis/);
   assert.match(html, /1991–2006/);
-  assert.match(html, /Feast 12 October/);
+  assert.match(html, /Feast (?:<!-- -->)?12 October/);
   assert.match(html, /The story of (?:<!-- -->)?Carlo Acutis/);
   assert.match(html, /Prayer source/);
-  assert.match(html, /Adapted from the official prayer for Carlo’s canonisation/);
+  assert.match(html, /Adapted from the official prayer published by the Carlo Acutis Association with ecclesiastical approval; the former petition for canonisation has been updated following his canonisation\./);
   assert.match(html, /Association of Carlo Acutis/);
   assert.match(html, /Portrait source/);
   assert.doesNotMatch(html, /Saint 0\d of 0\d/);
@@ -134,6 +149,29 @@ test("server-renders an individual saint life and prayer", async () => {
   assert.ok(prayerPosition > -1 && prayerPosition < storyPosition);
 });
 
+test("server-renders the updated intercession for every matched saint", async () => {
+  const expectedPrayerText = [
+    ["john-paul-ii", "Help us not to allow ourselves to be robbed of hope"],
+    ["carlo-acutis", "a singer of her tenderness."],
+    ["jacinta-francisco-marto", "to console the Hearts of Jesus and Mary."],
+    ["maria-goretti", "to forgive those who hurt us"],
+    ["padre-pio", "live in the hope of His Resurrection."],
+    ["john-vianney", "Pray especially for our priests."],
+    ["therese-of-lisieux", "give us hearts filled with missionary zeal"],
+    ["augustine", "never to give up our search for Truth"],
+    ["alphonsa", "May our sufferings draw us ever closer to Christ"],
+    ["euphrasia-eluvathingal", "to carry His presence with us"],
+  ];
+
+  for (const [slug, prayerText] of expectedPrayerText) {
+    const response = await render(`/saints/${slug}`);
+    assert.equal(response.status, 200, `expected /saints/${slug} to render`);
+
+    const html = await response.text();
+    assert.ok(html.includes(prayerText), `expected /saints/${slug} to include its updated prayer`);
+  }
+});
+
 test("keeps starter preview code and metadata out of the finished site", async () => {
   const [page, gallery, layout, packageJson] = await Promise.all([
     readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
@@ -144,7 +182,7 @@ test("keeps starter preview code and metadata out of the finished site", async (
 
   assert.match(page, /SaintGallery/);
   assert.match(gallery, /saint-grid/);
-  assert.match(layout, /Relics Exhibition Guide/);
+  assert.match(layout, /The Saints Chapel/);
   assert.doesNotMatch(packageJson, /react-loading-skeleton/);
   assert.doesNotMatch(page, /_sites-preview|codex-preview/);
   await assert.rejects(access(new URL("../app/_sites-preview", import.meta.url)));

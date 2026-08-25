@@ -1,9 +1,11 @@
 import Link from "next/link";
+import { chapelWebsiteLd, JsonLd } from "./json-ld";
 import SaintGallery from "./saint-gallery";
 
 export default function Home() {
   return (
     <main className="exhibition-shell">
+      <JsonLd data={chapelWebsiteLd()} />
       <header className="site-header home-header">
         <Link className="brand" href="/" aria-label="The Saints Chapel home">
           The Saints Chapel

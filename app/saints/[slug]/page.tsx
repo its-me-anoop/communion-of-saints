@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getSaint, saints } from "../../saints";
+import { JsonLd, saintPersonLd } from "../../json-ld";
+import { getSaint, saintDisplayName, saints } from "../../saints";
 
 type PageProps = { params: Promise<{ slug: string }> };
 
@@ -13,9 +14,29 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const saint = getSaint((await params).slug);
   if (!saint) return {};
+
+  const title = saintDisplayName(saint);
+  const description = `Pray with ${title} (${saint.lifespan}), feast day ${saint.feast}. ${saint.introduction}`;
+
   return {
-    title: saint.name,
-    description: `${saint.introduction} Pray with ${saint.name} and read a brief life.`,
+    title,
+    description,
+    alternates: {
+      canonical: `/saints/${saint.slug}`,
+    },
+    openGraph: {
+      type: "article",
+      title: `${title} · The Saints Chapel`,
+      description,
+      url: `/saints/${saint.slug}`,
+      images: [{ url: saint.image, alt: saint.imageAlt }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${title} · The Saints Chapel`,
+      description,
+      images: [saint.image],
+    },
   };
 }
 
@@ -26,9 +47,11 @@ export default async function SaintPage({ params }: PageProps) {
   const currentIndex = saints.findIndex((item) => item.slug === saint.slug);
   const previous = saints[(currentIndex - 1 + saints.length) % saints.length];
   const next = saints[(currentIndex + 1) % saints.length];
+  const displayName = saintDisplayName(saint);
 
   return (
     <main className="saint-page">
+      <JsonLd data={saintPersonLd(saint)} />
       <header className="site-header saint-header">
         <Link className="brand" href="/" aria-label="The Saints Chapel home">
           The Saints Chapel
@@ -48,7 +71,7 @@ export default async function SaintPage({ params }: PageProps) {
                 sizes="(max-width: 700px) 100vw, 42vw"
               />
               <div className="portrait-meta">
-                <h1 id="saint-name">St. {saint.shortName}</h1>
+                <h1 id="saint-name">{displayName}</h1>
                 <p>
                   <span>{saint.lifespan}</span>
                   <span>Feast {saint.feast}</span>

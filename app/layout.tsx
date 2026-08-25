@@ -1,35 +1,59 @@
 import type { Metadata } from "next";
-import { headers } from "next/headers";
+import { siteUrl } from "./site";
 import "./globals.css";
 
-export async function generateMetadata(): Promise<Metadata> {
-  const requestHeaders = await headers();
-  const host = requestHeaders.get("x-forwarded-host") ?? requestHeaders.get("host") ?? "localhost:3001";
-  const protocol = requestHeaders.get("x-forwarded-proto") ?? (host.startsWith("localhost") ? "http" : "https");
-  const metadataBase = new URL(`${protocol}://${host}`);
+export function generateMetadata(): Metadata {
+  const title = "The Saints Chapel";
+  const description =
+    "Pray with the saints, read their lives, and learn why Catholics honour relics. “Since we are surrounded by so great a cloud of witnesses…” Hebrews 12:1.";
 
   return {
-    metadataBase,
+    metadataBase: new URL(siteUrl),
+    applicationName: title,
     title: {
-      default: "Relics Exhibition Guide",
-      template: "%s · Relics Exhibition Guide",
+      default: title,
+      template: `%s · ${title}`,
     },
-    description:
-      "The Jesus Youth UK exhibition companion: find the saint before you, discover their life and pray for their intercession.",
+    description,
+    keywords: [
+      "The Saints Chapel",
+      "Catholic saints",
+      "relics",
+      "Communion of Saints",
+      "Catholic prayer",
+      "Hebrews 12:1",
+      "veneration of relics",
+    ],
+    authors: [{ name: title }],
+    creator: title,
+    alternates: {
+      canonical: "/",
+    },
+    robots: {
+      index: true,
+      follow: true,
+    },
     openGraph: {
-      title: "Relics Exhibition Guide · Jesus Youth UK",
-      description: "Find the saint before you · discover their life · pause and pray",
-      images: [{ url: "/og.jpg", width: 1200, height: 630, alt: "Relics Exhibition Guide by Jesus Youth UK" }],
+      type: "website",
+      locale: "en_GB",
+      url: "/",
+      siteName: title,
+      title,
+      description,
+      images: [{ url: "/og.jpg", width: 1200, height: 630, alt: title }],
     },
     twitter: {
       card: "summary_large_image",
-      title: "Relics Exhibition Guide · Jesus Youth UK",
-      description: "Find the saint before you · discover their life · pause and pray",
+      title,
+      description,
       images: ["/og.jpg"],
     },
     icons: {
-      icon: "/jesus-youth-uk.png",
-      apple: "/jesus-youth-uk.png",
+      icon: "/favicon.svg",
+      apple: "/og.jpg",
+    },
+    other: {
+      "theme-color": "#141922",
     },
   };
 }
