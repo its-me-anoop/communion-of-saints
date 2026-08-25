@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { saints } from "./saints";
+import { saintDisplayName, saints } from "./saints";
 
 export default function SaintGallery() {
   const [query, setQuery] = useState("");
@@ -50,7 +50,7 @@ export default function SaintGallery() {
               className="saint-card"
               href={`/saints/${saint.slug}`}
               key={saint.slug}
-              aria-label={`Meet St. ${saint.shortName}`}
+              aria-label={`Meet ${saintDisplayName(saint)}`}
             >
               <span className="portrait-ring">
                 <span className="card-image">
@@ -64,7 +64,7 @@ export default function SaintGallery() {
                 </span>
               </span>
               <span className="card-copy">
-                <span className="card-name">St. {saint.shortName}</span>
+                <span className="card-name">{saintDisplayName(saint)}</span>
               </span>
             </Link>
           ))}

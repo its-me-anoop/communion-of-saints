@@ -601,6 +601,7 @@ summary {
 .prayer-text p {
   max-width: 50ch;
   margin: 0 0 18px;
+  white-space: pre-line;
 }
 
 .prayer-source {
