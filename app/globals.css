@@ -44,6 +44,11 @@
   --line: oklch(53% 0.055 83 / 0.38);
   --display: "Cinzel", Georgia, serif;
   --body: "Spectral", Georgia, serif;
+  --ease-chapel: cubic-bezier(0.22, 1, 0.36, 1);
+  --motion-fast: 180ms;
+  --motion-medium: 260ms;
+  --motion-image: 360ms;
+  --motion-route: 460ms;
 }
 
 * {
@@ -86,6 +91,23 @@ summary {
   outline-offset: 4px;
 }
 
+.route-transition {
+  min-height: 100vh;
+  animation: route-settle var(--motion-route) var(--ease-chapel) both;
+}
+
+@keyframes route-settle {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .exhibition-shell,
 .saint-page {
   min-height: 100vh;
@@ -112,6 +134,7 @@ summary {
   letter-spacing: 0.14em;
   line-height: 1.2;
   text-transform: uppercase;
+  transition: opacity var(--motion-fast) var(--ease-chapel);
 }
 
 .exhibition-label,
@@ -129,16 +152,35 @@ summary {
 }
 
 .header-link {
+  position: relative;
   min-height: 44px;
   display: inline-flex;
   align-items: center;
-  border-bottom: 1px solid transparent;
-  transition: border-color 180ms ease-out, color 180ms ease-out;
+  opacity: 0.82;
+  transition: opacity var(--motion-fast) var(--ease-chapel);
 }
 
-.header-link:hover {
+.header-link::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 5px;
+  left: 0;
+  height: 1px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform var(--motion-fast) var(--ease-chapel);
+}
+
+.header-link:focus-visible {
   color: var(--gold-pale);
-  border-color: var(--gold);
+  opacity: 1;
+}
+
+.header-link:focus-visible::after {
+  transform: scaleX(1);
+  transform-origin: left;
 }
 
 .saint-finder {
@@ -197,6 +239,7 @@ summary {
 }
 
 .search-wrap {
+  position: relative;
   max-width: 620px;
   min-height: 46px;
   margin: 25px auto 22px;
@@ -207,6 +250,26 @@ summary {
   gap: 8px 16px;
   border: 1px solid var(--line);
   border-radius: 999px;
+  transition: transform var(--motion-medium) var(--ease-chapel);
+}
+
+.search-wrap::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border: 2px solid var(--gold);
+  border-radius: inherit;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--motion-fast) var(--ease-chapel);
+}
+
+.search-wrap:focus-within {
+  transform: translateY(-1px);
+}
+
+.search-wrap:focus-within::after {
+  opacity: 0.78;
 }
 
 .search-wrap label {
@@ -236,8 +299,8 @@ summary {
   opacity: 0.78;
 }
 
-.search-wrap input:focus {
-  outline-offset: 3px;
+.search-wrap input:focus-visible {
+  outline: 0;
 }
 
 .search-wrap > span {
@@ -253,6 +316,7 @@ summary {
 }
 
 .saint-card {
+  position: relative;
   min-width: 0;
   min-height: 164px;
   padding: 13px 8px 12px;
@@ -262,13 +326,39 @@ summary {
   border: 1px solid var(--line);
   border-radius: 9px;
   background: oklch(18% 0.027 253 / 0.9);
+  isolation: isolate;
+  overflow: hidden;
   text-align: center;
-  transition: background-color 220ms ease-out, transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform var(--motion-medium) var(--ease-chapel);
 }
 
-.saint-card:hover {
-  background-color: var(--ink-raised);
-  transform: translateY(-3px);
+.saint-card::before {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  z-index: 0;
+  border-radius: 8px;
+  background: var(--ink-raised);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--motion-medium) var(--ease-chapel);
+}
+
+.saint-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.saint-card:focus-visible {
+  transform: translateY(-2px);
+}
+
+.saint-card:focus-visible::before {
+  opacity: 1;
+}
+
+.saint-card:active {
+  transform: translateY(-1px) scale(0.985);
 }
 
 .portrait-ring {
@@ -306,6 +396,11 @@ summary {
 .saint-portrait-frame img {
   object-fit: cover;
   object-position: center 20%;
+}
+
+.card-image img {
+  transform: scale(1.001);
+  transition: transform var(--motion-image) var(--ease-chapel);
 }
 
 .card-copy {
@@ -499,9 +594,6 @@ summary {
   justify-content: center;
   padding: 22px 0;
   overflow: hidden;
-  border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
-  background-color: var(--wine);
 }
 
 .saint-portrait-frame {
@@ -646,6 +738,35 @@ summary {
   border-bottom: 1px solid var(--line);
 }
 
+.empty-state button,
+.prayer-source a,
+.image-credit {
+  position: relative;
+  border-bottom: 0;
+}
+
+.empty-state button::after,
+.prayer-source a::after,
+.image-credit::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: -2px;
+  left: 0;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform var(--motion-fast) var(--ease-chapel);
+}
+
+.empty-state button:focus-visible::after,
+.prayer-source a:focus-visible::after,
+.image-credit:focus-visible::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
 .saint-pagination {
   width: min(100% - 36px, 1180px);
   margin: 0 auto;
@@ -679,9 +800,11 @@ summary {
 }
 
 .saint-pagination strong {
+  display: inline-block;
   color: var(--ivory);
   font-weight: 400;
   line-height: 1.25;
+  transition: transform var(--motion-fast) var(--ease-chapel);
 }
 
 .saint-pagination .pagination-home {
@@ -691,11 +814,63 @@ summary {
   font-size: 0.68rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+  transition: transform var(--motion-fast) var(--ease-chapel);
 }
 
 .pagination-next {
   padding-left: 14px !important;
   text-align: right;
+}
+
+@media (hover: none), (pointer: coarse) {
+  .empty-state button::after,
+  .prayer-source a::after,
+  .image-credit::after {
+    transform: scaleX(1);
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .brand:hover {
+    opacity: 0.76;
+  }
+
+  .header-link:hover {
+    color: var(--gold-pale);
+    opacity: 1;
+  }
+
+  .header-link:hover::after,
+  .empty-state button:hover::after,
+  .prayer-source a:hover::after,
+  .image-credit:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+
+  .saint-card:hover {
+    transform: translateY(-4px);
+  }
+
+  .saint-card:hover::before {
+    opacity: 1;
+  }
+
+  .saint-card:hover .card-image img {
+    transform: scale(1.025);
+  }
+
+  .saint-pagination a:first-child:hover strong {
+    transform: translateX(-3px);
+  }
+
+  .saint-pagination a:last-child:hover strong {
+    transform: translateX(3px);
+  }
+
+  .saint-pagination .pagination-home:hover {
+    transform: translateY(-2px);
+  }
 }
 
 @media (min-width: 640px) {
@@ -851,7 +1026,13 @@ summary {
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+  }
+
+  .route-transition {
+    animation: none !important;
   }
 }

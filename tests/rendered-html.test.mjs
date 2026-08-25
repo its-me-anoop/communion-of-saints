@@ -187,3 +187,21 @@ test("keeps starter preview code and metadata out of the finished site", async (
   assert.doesNotMatch(page, /_sites-preview|codex-preview/);
   await assert.rejects(access(new URL("../app/_sites-preview", import.meta.url)));
 });
+
+test("uses calm route motion with a reduced-motion fallback", async () => {
+  const [page, template, styles] = await Promise.all([
+    readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/saints/[slug]/template.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
+  ]);
+
+  assert.match(page, /exhibition-shell route-transition/);
+  assert.match(template, /className="route-transition"/);
+  assert.match(styles, /--ease-chapel:\s*cubic-bezier\(0\.22, 1, 0\.36, 1\)/);
+  assert.match(styles, /@keyframes route-settle/);
+  assert.match(styles, /@media \(hover: none\), \(pointer: coarse\)/);
+  assert.match(styles, /@media \(hover: hover\) and \(pointer: fine\)/);
+  assert.match(styles, /@media \(prefers-reduced-motion: reduce\)/);
+  assert.match(styles, /\.route-transition\s*{\s*animation: none !important;/);
+  assert.doesNotMatch(styles, /\bbounce\b|\belastic\b/i);
+});

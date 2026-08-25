@@ -4,7 +4,7 @@ import SaintGallery from "./saint-gallery";
 
 export default function Home() {
   return (
-    <main className="exhibition-shell">
+    <main className="exhibition-shell route-transition">
       <JsonLd data={chapelWebsiteLd()} />
       <header className="site-header home-header">
         <Link className="brand" href="/" aria-label="The Saints Chapel home">
