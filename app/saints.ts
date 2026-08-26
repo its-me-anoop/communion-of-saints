@@ -47,6 +47,11 @@ export function saintDisplayName(saint: Pick<Saint, "name" | "shortName">) {
   return `${honorific} ${saint.shortName}`;
 }
 
+export function saintPatronageLabel(saint: Pick<Saint, "name" | "patronage">) {
+  const prefix = saint.name.startsWith("Saints ") ? "Patrons of" : "Patron of";
+  return `${prefix} ${saint.patronage}`;
+}
+
 export const saints: Saint[] = [
   {
     slug: "john-paul-ii",
@@ -107,7 +112,7 @@ export const saints: Saint[] = [
     prayerAttribution: "Adapted from the official prayer published by the Carlo Acutis Association with ecclesiastical approval; the former petition for canonisation has been updated following his canonisation.",
     prayerSourceName: "Association of Carlo Acutis",
     prayerSource: "https://www.carloacutis.com/en/association/preghiera-ufficiale",
-    patronage: "Young people and the digital age",
+    patronage: "young people and the digital age",
   },
   {
     slug: "jacinta-francisco-marto",
@@ -137,7 +142,7 @@ export const saints: Saint[] = [
     prayerAttribution: "Adapted from the concluding prayer and themes of the official Litany of Saints Francisco and Jacinta published by the Shrine of Fátima.",
     prayerSourceName: "Shrine of Fátima",
     prayerSource: "https://www.fatima.pt/en/pages/litany-of-saints-francisco-and-jacinta",
-    patronage: "Children and the conversion of sinners",
+    patronage: "children and the conversion of sinners",
   },
   {
     slug: "maria-goretti",
@@ -168,7 +173,7 @@ export const saints: Saint[] = [
     prayerAttribution: "Lightly adapted from the traditional Official Prayer to St Maria Goretti.",
     prayerSourceName: "World Apostolate of St Maria Goretti",
     prayerSource: "https://www.mariagoretti.org/specialprayers.htm",
-    patronage: "Young people, purity and forgiveness",
+    patronage: "young people, purity and forgiveness",
   },
   {
     slug: "john-vianney",
@@ -198,7 +203,7 @@ export const saints: Saint[] = [
     prayerAttribution: "Intercessory prayer for chapel use, drawing on the Church’s presentation of St John Vianney’s priestly spirituality.",
     prayerSourceName: "The Holy See",
     prayerSource: "https://www.vatican.va/content/benedict-xvi/en/letters/2009/documents/hf_ben-xvi_let_20090616_anno-sacerdotale.html",
-    patronage: "Parish priests",
+    patronage: "parish priests",
   },
   {
     slug: "therese-of-lisieux",
@@ -229,7 +234,7 @@ export const saints: Saint[] = [
     prayerAttribution: "Intercessory prayer based on St Thérèse’s spirituality and the Church’s presentation of her missionary vocation.",
     prayerSourceName: "Sanctuary of Lisieux",
     prayerSource: "https://www.therese-de-lisieux.catholique.fr/en/lhistoire/la-spiritualite-de-therese/",
-    patronage: "Missions and missionaries",
+    patronage: "missions and missionaries",
   },
   {
     slug: "augustine",
@@ -261,7 +266,7 @@ export const saints: Saint[] = [
     prayerAttribution: "Adapted from themes in St John Paul II’s Prayer to St Augustine, prayed before the saint’s relics in 2004.",
     prayerSourceName: "The Holy See",
     prayerSource: "https://www.vatican.va/content/john-paul-ii/en/speeches/2004/november/documents/hf_jp-ii_spe_20041111_prayer-st-augustine.html",
-    patronage: "Seekers, converts and theologians",
+    patronage: "seekers, converts and theologians",
   },
   {
     slug: "padre-pio",
@@ -291,7 +296,7 @@ export const saints: Saint[] = [
     prayerAttribution: "Display adaptation inspired by the approved Prayer to Saint Pio and the spirituality of his life.",
     prayerSourceName: "Convent Shrine of Saint Pio of Pietrelcina",
     prayerSource: "https://www.conventosantuariopadrepio.it/en/archivio/le-preghiere/prayer-to-saint-pio.html",
-    patronage: "The sick and those who suffer",
+    patronage: "the sick and those who suffer",
   },
   {
     slug: "alphonsa",
@@ -323,7 +328,7 @@ export const saints: Saint[] = [
     prayerAttribution: "Intercessory prayer for chapel use, based on the spirituality highlighted in official Church texts about St Alphonsa.",
     prayerSourceName: "The Holy See",
     prayerSource: "https://www.vatican.va/content/john-paul-ii/en/homilies/1986/documents/hf_jp-ii_hom_19860208_stadio-kattayam.html",
-    patronage: "The sick and those who suffer",
+    patronage: "the sick and those who suffer",
   },
   {
     slug: "euphrasia-eluvathingal",
@@ -354,7 +359,7 @@ export const saints: Saint[] = [
     prayerAttribution: "Intercessory prayer for chapel use, based on the Eucharistic and prayerful spirituality highlighted in Church texts about St Euphrasia.",
     prayerSourceName: "The Holy See",
     prayerSource: "https://www.vatican.va/news_services/liturgy/saints/ns_lit_doc_20061203_eufrasia_en.html",
-    patronage: "Prayer and Eucharistic adoration",
+    patronage: "prayer and Eucharistic adoration",
   },
 ];
 

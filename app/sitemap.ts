@@ -10,6 +10,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly",
       priority: 1,
     },
+    {
+      url: `${siteUrl}/meditation`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.9,
+    },
     ...saints.map((saint) => ({
       url: `${siteUrl}/saints/${saint.slug}`,
       lastModified: new Date(),

@@ -52,24 +52,27 @@ export default async function SaintPage({ params }: PageProps) {
   return (
     <main className="saint-page">
       <JsonLd data={saintPersonLd(saint)} />
-      <header className="site-header saint-header">
-        <Link className="brand" href="/" aria-label="The Saints Chapel home">
-          The Saints Chapel
+      <nav className="site-header saint-header" aria-label="Saint page navigation">
+        <Link className="back-link" href="/" aria-label="Back to all saints">
+          <span aria-hidden="true">‹</span>
+          All saints
         </Link>
-        <Link className="header-link" href="/#saints">All saints</Link>
-      </header>
+        <a className="header-action" href="#prayer">Prayer</a>
+      </nav>
 
       <article>
         <section className="saint-hero" aria-labelledby="saint-name">
           <div className="portrait-stage">
-            <div className="saint-portrait-frame">
-              <Image
-                src={saint.image}
-                alt={saint.imageAlt}
-                fill
-                priority
-                sizes="(max-width: 700px) 100vw, 42vw"
-              />
+            <div className="saint-portrait-card">
+              <div className="saint-portrait-frame">
+                <Image
+                  src={saint.image}
+                  alt={saint.imageAlt}
+                  fill
+                  priority
+                  sizes="(max-width: 700px) 100vw, 42vw"
+                />
+              </div>
               <div className="portrait-meta">
                 <h1 id="saint-name">{displayName}</h1>
                 <p>

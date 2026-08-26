@@ -1,15 +1,17 @@
 import { chapelWebsiteLd, JsonLd } from "./json-ld";
+import ChapelTabs from "./chapel-tabs";
 import SaintGallery from "./saint-gallery";
 
 export default function Home() {
   return (
     <main className="exhibition-shell route-transition">
       <JsonLd data={chapelWebsiteLd()} />
+      <ChapelTabs active="saints" />
       <SaintGallery />
 
       <section className="relic-teaching" aria-label="About relics">
         <article>
-          <h3>What is a relic?</h3>
+          <h2>What is a relic?</h2>
           <p>
             A relic is a physical object closely connected with a saint. It may be
             part of the saint’s body, something the saint owned or used, or an
@@ -22,7 +24,7 @@ export default function Home() {
           </p>
         </article>
         <article>
-          <h3>Why do Catholics venerate relics?</h3>
+          <h2>Why do Catholics venerate relics?</h2>
           <p>Catholics do not worship relics or the saints. We worship God alone.</p>
           <p>
             We honour relics because God has worked through the lives and even
@@ -37,11 +39,6 @@ export default function Home() {
           </p>
         </article>
       </section>
-
-      <footer className="site-footer">
-        <p>Tap a portrait to meet the saint</p>
-        <span>Jesus Youth UK</span>
-      </footer>
     </main>
   );
 }

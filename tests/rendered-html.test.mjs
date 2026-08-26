@@ -76,6 +76,30 @@ async function render(path = "/") {
   });
 }
 
+function htmlToText(html) {
+  return html
+    .replace(/<!--[\s\S]*?-->/g, "")
+    .replace(/<[^>]+>/g, " ")
+    .replaceAll("&amp;", "&")
+    .replaceAll("&lt;", "<")
+    .replaceAll("&gt;", ">")
+    .replaceAll("&quot;", '"')
+    .replaceAll("&#x27;", "'")
+    .replace(/\s+/g, " ")
+    .replace(/\s+([,.;:!?])/g, "$1")
+    .trim();
+}
+
+function assertOrderedText(actual, expected, label) {
+  let cursor = 0;
+
+  for (const item of expected) {
+    const position = actual.indexOf(item, cursor);
+    assert.ok(position >= cursor, `${label} is missing or out of order: ${item}`);
+    cursor = position + item.length;
+  }
+}
+
 test("server-renders the exhibition saint gallery", async () => {
   const response = await render();
   assert.equal(response.status, 200);
@@ -85,6 +109,14 @@ test("server-renders the exhibition saint gallery", async () => {
   assert.match(html, /<title>The Saints Chapel<\/title>/i);
   assert.match(html, /Pray with the saints/);
   assert.match(html, /The Saints Chapel/);
+  assert.match(html, /Meet the saints/);
+  assert.doesNotMatch(html, /Portraits, stories &amp; prayers|10(?:<!-- -->)? saints/);
+  assert.match(html, /aria-label="Chapel sections"/);
+  assert.match(
+    html,
+    /<a(?=[^>]*aria-current="page")(?=[^>]*href="\/")[^>]*>Saints<\/a>/,
+  );
+  assert.match(html, /href="\/meditation">Meditation<\/a>/);
   assert.match(html, /application\/ld\+json/);
   assert.match(html, /<link rel="canonical" href="https:\/\/communion-of-saints\.vercel\.app"\/>/);
   assert.match(html, /<meta property="og:url" content="https:\/\/communion-of-saints\.vercel\.app"\/>/);
@@ -94,9 +126,9 @@ test("server-renders the exhibition saint gallery", async () => {
   assert.doesNotMatch(html, /Choose a saint/);
   assert.doesNotMatch(html, /Match the portrait beside the relic/);
   assert.doesNotMatch(html, /Search the saints|Type a name or patronage|saint-search/);
-  assert.match(html, /Tap a portrait to meet the saint/);
-  assert.match(html, /What is a relic\?/);
-  assert.match(html, /Why do Catholics venerate relics\?/);
+  assert.doesNotMatch(html, /class="site-footer"|Tap a portrait to meet the saint/);
+  assert.match(html, /<h2>What is a relic\?<\/h2>/);
+  assert.match(html, /<h2>Why do Catholics venerate relics\?<\/h2>/);
   assert.match(html, /physical object closely connected with a saint/);
   assert.match(html, /We worship God alone/);
   assert.match(html, /2 Kings 13:20/);
@@ -107,19 +139,19 @@ test("server-renders the exhibition saint gallery", async () => {
   assert.match(html, /St\. Padre Pio/);
   assert.match(html, /St\. Alphonsa/);
   assert.match(html, /St\. Euphrasia Eluvathingal/);
-  for (const [saint, patronage] of [
-    ["St. John Paul II", "World Youth Day and young people"],
-    ["St. Carlo Acutis", "Young people and the digital age"],
-    ["Sts. Jacinta &amp; Francisco", "Children and the conversion of sinners"],
-    ["St. Maria Goretti", "Young people, purity and forgiveness"],
-    ["St. John Vianney", "Parish priests"],
-    ["St. Thérèse of Lisieux", "Missions and missionaries"],
-    ["St. Augustine", "Seekers, converts and theologians"],
-    ["St. Padre Pio", "The sick and those who suffer"],
-    ["St. Alphonsa", "The sick and those who suffer"],
-    ["St. Euphrasia Eluvathingal", "Prayer and Eucharistic adoration"],
+  for (const [saint, patronageLabel] of [
+    ["St. John Paul II", "Patron of World Youth Day and young people"],
+    ["St. Carlo Acutis", "Patron of young people and the digital age"],
+    ["Sts. Jacinta &amp; Francisco", "Patrons of children and the conversion of sinners"],
+    ["St. Maria Goretti", "Patron of young people, purity and forgiveness"],
+    ["St. John Vianney", "Patron of parish priests"],
+    ["St. Thérèse of Lisieux", "Patron of missions and missionaries"],
+    ["St. Augustine", "Patron of seekers, converts and theologians"],
+    ["St. Padre Pio", "Patron of the sick and those who suffer"],
+    ["St. Alphonsa", "Patron of the sick and those who suffer"],
+    ["St. Euphrasia Eluvathingal", "Patron of prayer and Eucharistic adoration"],
   ]) {
-    const accessibleLabel = `aria-label="Meet ${saint}. Patronage: ${patronage}"`;
+    const accessibleLabel = `aria-label="Meet ${saint}. ${patronageLabel}"`;
     assert.ok(html.includes(accessibleLabel), `expected patronage for ${saint}`);
   }
   assert.equal((html.match(/class="card-patronage"/g) ?? []).length, 10);
@@ -141,6 +173,116 @@ test("server-renders the exhibition saint gallery", async () => {
   assert.doesNotMatch(forgedHostHtml, /attacker\.example/);
 });
 
+test("server-renders the supplied Meditation and Litany of the Saints", async () => {
+  const response = await render("/meditation");
+  assert.equal(response.status, 200);
+
+  const html = await response.text();
+  assert.match(html, /<title>Meditation · The Saints Chapel<\/title>/i);
+  assert.match(
+    html,
+    /<link rel="canonical" href="https:\/\/communion-of-saints\.vercel\.app\/meditation"\/>/,
+  );
+  assert.match(
+    html,
+    /<meta property="og:title" content="Meditation · The Saints Chapel"\/>/,
+  );
+  assert.match(
+    html,
+    /<meta property="og:url" content="https:\/\/communion-of-saints\.vercel\.app\/meditation"\/>/,
+  );
+  assert.match(
+    html,
+    /<meta name="twitter:title" content="Meditation · The Saints Chapel"\/>/,
+  );
+  assert.match(html, /aria-label="Chapel sections"/);
+  assert.match(
+    html,
+    /<a(?=[^>]*aria-current="page")(?=[^>]*href="\/meditation")[^>]*>Meditation<\/a>/,
+  );
+  assert.match(html, /Jesus Youth Silver Jubilee 2026/i);
+  assert.match(html, /Ephesians 3:18–19/);
+  assert.match(html, /With all the saints…/);
+  assert.match(html, /What depth of love for Christ/);
+  assert.match(html, /Litany of the Saints/);
+  assert.match(html, /Holy Mary, Mother of God/);
+  assert.match(html, /St Euphrasia Eluvathingal/);
+  assert.match(html, /May we, with all the saints/);
+  assert.doesNotMatch(html, /noindex|content will be added here/i);
+  assert.doesNotMatch(html, /saint-grid|relic-teaching/);
+
+  const articleHtml = html.match(
+    /<article class="meditation-content">([\s\S]*?)<\/article>/,
+  )?.[1];
+  assert.ok(articleHtml, "expected the complete Meditation article");
+
+  const articleText = htmlToText(articleHtml);
+  assertOrderedText(
+    articleText,
+    [
+      "The Saints Chapel",
+      "Jesus Youth Silver Jubilee 2026",
+      "Meditation",
+      "“That you may have the power to comprehend, with all the saints, what is the breadth and length and height and depth, and to know the love of Christ that surpasses knowledge, so that you may be filled with all the fullness of God.”",
+      "Ephesians 3:18–19",
+      "With all the saints…",
+      "Take a moment and become still.",
+      "Slow down. Quiet your heart. Become aware of where you are.",
+      "You are surrounded by the relics of men and women who loved Jesus.",
+      "They walked this earth as we do.",
+      "They knew joy and sorrow, weakness and temptation, suffering and sacrifice.",
+      "Yet they allowed the love of Christ to transform their lives.",
+      "Their earthly lives have ended, but they are alive in Christ.",
+      "In the stillness of this chapel, allow yourself to experience the Communion of Saints — the aroma of holiness that surrounds you, and the witness of lives completely surrendered to God.",
+      "Pause and reflect",
+      "What depth of love for Christ would lead these saints to give Him everything — even their lives?",
+      "What did they discover in Jesus that made everything else seem small?",
+      "And now, think of God the Father’s love for you.",
+      "The same God who called them to holiness calls you.",
+      "The same Christ whom they loved loves you.",
+      "Can you begin to comprehend",
+      "the breadth and length,",
+      "the height and depth",
+      "of His love for you?",
+      "Stay here for a moment.",
+      "Let yourself be loved by God.",
+      "Then look around you at these witnesses of that Love.",
+      "Bring to them the intentions you carry in your heart and ask them to pray with you and for you.",
+      "Litany of the Saints",
+      "May we, with all the saints, come to know the love of Christ that surpasses knowledge and be filled with all the fullness of God. Amen.",
+    ],
+    "Meditation content",
+  );
+
+  const litanyHtml = html.match(/<ul class="litany-list">([\s\S]*?)<\/ul>/)?.[1];
+  assert.ok(litanyHtml, "expected the Litany of the Saints list");
+  assert.equal((litanyHtml.match(/<li>/g) ?? []).length, 14);
+
+  const litanyText = htmlToText(litanyHtml);
+  const expectedLitany = [
+    "Holy Mary, Mother of God",
+    "St Joseph",
+    "St John Paul II",
+    "St Carlo Acutis",
+    "St Francisco Marto",
+    "St Jacinta Marto",
+    "St Maria Goretti",
+    "St Pio of Pietrelcina",
+    "St John Mary Vianney",
+    "St Thérèse of Lisieux",
+    "St Augustine of Hippo",
+    "St Alphonsa of the Immaculate Conception",
+    "St Euphrasia Eluvathingal",
+    "All holy angels and saints of God",
+  ];
+  assertOrderedText(
+    litanyText,
+    expectedLitany.flatMap((saint) => [`${saint},`, "pray for us."]),
+    "Litany",
+  );
+  assert.equal((litanyText.match(/pray for us\./g) ?? []).length, expectedLitany.length);
+});
+
 test("server-renders an individual saint life and prayer", async () => {
   const response = await render("/saints/carlo-acutis");
   assert.equal(response.status, 200);
@@ -154,6 +296,9 @@ test("server-renders an individual saint life and prayer", async () => {
   assert.match(html, /Adapted from the official prayer published by the Carlo Acutis Association with ecclesiastical approval; the former petition for canonisation has been updated following his canonisation\./);
   assert.match(html, /Association of Carlo Acutis/);
   assert.match(html, /Portrait source/);
+  assert.match(html, /aria-label="Saint page navigation"/);
+  assert.match(html, /aria-label="Back to all saints"/);
+  assert.match(html, /href="#prayer">Prayer<\/a>/);
   assert.doesNotMatch(html, /Saint 0\d of 0\d/);
   assert.doesNotMatch(html, /Holiness in the digital age/);
   assert.doesNotMatch(html, /Relic available at this exhibition/);
@@ -223,4 +368,29 @@ test("uses calm route motion with a reduced-motion fallback", async () => {
   assert.match(styles, /@media \(prefers-reduced-motion: reduce\)/);
   assert.match(styles, /\.route-transition\s*{\s*animation: none !important;/);
   assert.doesNotMatch(styles, /\bbounce\b|\belastic\b/i);
+});
+
+test("declares an app-native light shell and embedded viewport contract", async () => {
+  const [layout, gallery, saintPage, styles] = await Promise.all([
+    readFile(new URL("../app/layout.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/saint-gallery.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/saints/[slug]/page.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
+  ]);
+
+  assert.match(layout, /export const viewport: Viewport/);
+  assert.match(layout, /viewportFit:\s*"cover"/);
+  assert.match(layout, /colorScheme:\s*"light"/);
+  assert.match(layout, /themeColor:\s*"#f0f2f4"/);
+  assert.match(gallery, /gallery-kicker/);
+  assert.doesNotMatch(gallery, /gallery-summary|gallery-count/);
+  assert.match(saintPage, /className="back-link"/);
+  assert.match(saintPage, /className="header-action"/);
+  assert.match(saintPage, /className="saint-portrait-card"/);
+  assert.match(styles, /ui-rounded/);
+  assert.match(styles, /100svh/);
+  assert.match(styles, /100dvh/);
+  assert.match(styles, /safe-area-inset-bottom/);
+  assert.doesNotMatch(styles, /safe-area-inset-top/);
+  assert.doesNotMatch(styles, /#[0]{3,6}\b|#[f]{3,6}\b/i);
 });

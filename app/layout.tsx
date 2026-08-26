@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { siteUrl } from "./site";
 import "./globals.css";
 
@@ -52,16 +52,25 @@ export function generateMetadata(): Metadata {
       icon: "/favicon.svg",
       apple: "/og.jpg",
     },
-    other: {
-      "theme-color": "#141922",
-    },
   };
 }
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  colorScheme: "light",
+  themeColor: "#f0f2f4",
+};
+
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" data-scroll-behavior="smooth">
-      <body>{children}</body>
+    <html
+      lang="en"
+      data-scroll-behavior="smooth"
+      style={{ backgroundColor: "#f0f2f4" }}
+    >
+      <body style={{ backgroundColor: "#f0f2f4" }}>{children}</body>
     </html>
   );
 }
