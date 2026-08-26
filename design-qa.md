@@ -12,30 +12,30 @@
 
 - The gallery uses the selected deep navy, antique gold, warm ivory, burgundy, and status-colour palette.
 - Cinzel and Spectral are bundled locally and render as the display/body pairing used by the reference.
-- The phone layout shows all eight saints in a compact two-column portrait gallery within the first 390 × 844 view.
-- The tablet layout uses a balanced four-by-two gallery without an incomplete final row.
-- The expanded view preserves the reference language through an arched portrait, burgundy portrait field, gold rules, large classical title, compact facts, and editorial prayer/story sections.
+- The phone layout presents all ten saints in a compact two-column portrait gallery.
+- The wider layout uses four columns with a deliberate 4/4/2 sequence for the ten-card collection.
+- The expanded view preserves the reference language through an arched portrait, a direct navy field, a large classical title, compact facts, and editorial prayer/story sections.
 - Long-form copy remains left aligned with restrained line lengths. Interactive labels retain visible focus states.
 
 ## Functional and responsive review
 
-- Search filters the gallery immediately; searching for `Carlo` returns one result.
-- Tapping the filtered result opens `/saints/carlo-acutis` with the expected heading and prayer source.
-- All eight saint routes render, and previous/next/all-saints navigation remains available.
-- No horizontal overflow was found at 390 px or 834 px.
+- Every portrait card includes a concise patronage line beneath the saint’s name.
+- Tapping a patronage card opens its matching saint route with the expected heading.
+- All ten saint routes render, and previous/next/all-saints navigation remains available.
+- No horizontal overflow was found at 320 px, 390 px, or 884 px.
 - Motion is limited to transform/colour state changes and honours `prefers-reduced-motion`.
 
 ## Issues found and resolved
 
-- P1: Initial mobile cards were too tall and only six saints were visible. Reduced card density and simplified the card copy so all eight are visible.
-- P1: Initial tablet gallery produced an uneven three-column final row. Changed the tablet gallery to four columns.
+- P1: The removed search control left obsolete filtering logic and empty-state styles. Removed both and restored intentional heading-to-grid spacing.
+- P1: Patronage initially sat too far from the saint’s name. Regrouped the card copy and allowed document-derived labels to wrap without clipping.
 - P2: The local Next.js development badge obscured screenshots. Disabled development indicators.
 - P2: Next.js warned about smooth-scroll route handling. Added the matching document attribute.
 - P0: None.
 
 ## Verification
 
-- `npm test`: 4/4 tests passed after a successful production build.
-- Browser checks: phone and tablet gallery, phone and tablet saint detail, search filtering, result navigation, local font loading, source-link presence.
+- `npm test`: 6/6 tests passed after a successful production build.
+- Browser checks: 320 px, 390 px, and 884 px galleries, all ten patronage labels, card navigation, horizontal overflow, and console errors.
 
 final result: passed
