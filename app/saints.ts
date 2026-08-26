@@ -75,7 +75,7 @@ export const saints: Saint[] = [
     prayerAttribution: "Adapted from Pope Francis’s prayer for the centenary of the birth of St John Paul II (18 May 2020).",
     prayerSourceName: "The Holy See",
     prayerSource: "https://www.vatican.va/content/francesco/en/prayers/documents/papa-francesco_preghiere_20200518_preghiera-centenario-gpii.html",
-    patronage: "Young people, families and World Youth Day",
+    patronage: "World Youth Day and young people",
   },
   {
     slug: "carlo-acutis",
@@ -107,7 +107,7 @@ export const saints: Saint[] = [
     prayerAttribution: "Adapted from the official prayer published by the Carlo Acutis Association with ecclesiastical approval; the former petition for canonisation has been updated following his canonisation.",
     prayerSourceName: "Association of Carlo Acutis",
     prayerSource: "https://www.carloacutis.com/en/association/preghiera-ufficiale",
-    patronage: "Young people, students and internet users",
+    patronage: "Young people and the digital age",
   },
   {
     slug: "jacinta-francisco-marto",
@@ -137,7 +137,7 @@ export const saints: Saint[] = [
     prayerAttribution: "Adapted from the concluding prayer and themes of the official Litany of Saints Francisco and Jacinta published by the Shrine of Fátima.",
     prayerSourceName: "Shrine of Fátima",
     prayerSource: "https://www.fatima.pt/en/pages/litany-of-saints-francisco-and-jacinta",
-    patronage: "Children, the sick and those devoted to the Rosary",
+    patronage: "Children and the conversion of sinners",
   },
   {
     slug: "maria-goretti",
@@ -168,7 +168,7 @@ export const saints: Saint[] = [
     prayerAttribution: "Lightly adapted from the traditional Official Prayer to St Maria Goretti.",
     prayerSourceName: "World Apostolate of St Maria Goretti",
     prayerSource: "https://www.mariagoretti.org/specialprayers.htm",
-    patronage: "Young people, survivors of violence and purity of heart",
+    patronage: "Young people, purity and forgiveness",
   },
   {
     slug: "john-vianney",
@@ -198,7 +198,7 @@ export const saints: Saint[] = [
     prayerAttribution: "Intercessory prayer for chapel use, drawing on the Church’s presentation of St John Vianney’s priestly spirituality.",
     prayerSourceName: "The Holy See",
     prayerSource: "https://www.vatican.va/content/benedict-xvi/en/letters/2009/documents/hf_ben-xvi_let_20090616_anno-sacerdotale.html",
-    patronage: "Parish priests and confessors",
+    patronage: "Parish priests",
   },
   {
     slug: "therese-of-lisieux",
@@ -229,7 +229,7 @@ export const saints: Saint[] = [
     prayerAttribution: "Intercessory prayer based on St Thérèse’s spirituality and the Church’s presentation of her missionary vocation.",
     prayerSourceName: "Sanctuary of Lisieux",
     prayerSource: "https://www.therese-de-lisieux.catholique.fr/en/lhistoire/la-spiritualite-de-therese/",
-    patronage: "Missionaries, florists and those seeking simplicity",
+    patronage: "Missions and missionaries",
   },
   {
     slug: "augustine",
@@ -261,7 +261,7 @@ export const saints: Saint[] = [
     prayerAttribution: "Adapted from themes in St John Paul II’s Prayer to St Augustine, prayed before the saint’s relics in 2004.",
     prayerSourceName: "The Holy See",
     prayerSource: "https://www.vatican.va/content/john-paul-ii/en/speeches/2004/november/documents/hf_jp-ii_spe_20041111_prayer-st-augustine.html",
-    patronage: "Theologians, printers and those seeking conversion",
+    patronage: "Seekers, converts and theologians",
   },
   {
     slug: "padre-pio",
@@ -291,7 +291,7 @@ export const saints: Saint[] = [
     prayerAttribution: "Display adaptation inspired by the approved Prayer to Saint Pio and the spirituality of his life.",
     prayerSourceName: "Convent Shrine of Saint Pio of Pietrelcina",
     prayerSource: "https://www.conventosantuariopadrepio.it/en/archivio/le-preghiere/prayer-to-saint-pio.html",
-    patronage: "The sick, confessors and those in need of healing",
+    patronage: "The sick and those who suffer",
   },
   {
     slug: "alphonsa",

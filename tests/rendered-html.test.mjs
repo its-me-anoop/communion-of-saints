@@ -76,7 +76,7 @@ async function render(path = "/") {
   });
 }
 
-test("server-renders the exhibition saint finder", async () => {
+test("server-renders the exhibition saint gallery", async () => {
   const response = await render();
   assert.equal(response.status, 200);
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
@@ -93,7 +93,7 @@ test("server-renders the exhibition saint finder", async () => {
   assert.doesNotMatch(html, />\s*The communion of saints/i);
   assert.doesNotMatch(html, /Choose a saint/);
   assert.doesNotMatch(html, /Match the portrait beside the relic/);
-  assert.match(html, /Search the saints/);
+  assert.doesNotMatch(html, /Search the saints|Type a name or patronage|saint-search/);
   assert.match(html, /Tap a portrait to meet the saint/);
   assert.match(html, /What is a relic\?/);
   assert.match(html, /Why do Catholics venerate relics\?/);
@@ -107,6 +107,22 @@ test("server-renders the exhibition saint finder", async () => {
   assert.match(html, /St\. Padre Pio/);
   assert.match(html, /St\. Alphonsa/);
   assert.match(html, /St\. Euphrasia Eluvathingal/);
+  for (const [saint, patronage] of [
+    ["St. John Paul II", "World Youth Day and young people"],
+    ["St. Carlo Acutis", "Young people and the digital age"],
+    ["Sts. Jacinta &amp; Francisco", "Children and the conversion of sinners"],
+    ["St. Maria Goretti", "Young people, purity and forgiveness"],
+    ["St. John Vianney", "Parish priests"],
+    ["St. Thérèse of Lisieux", "Missions and missionaries"],
+    ["St. Augustine", "Seekers, converts and theologians"],
+    ["St. Padre Pio", "The sick and those who suffer"],
+    ["St. Alphonsa", "The sick and those who suffer"],
+    ["St. Euphrasia Eluvathingal", "Prayer and Eucharistic adoration"],
+  ]) {
+    const accessibleLabel = `aria-label="Meet ${saint}. Patronage: ${patronage}"`;
+    assert.ok(html.includes(accessibleLabel), `expected patronage for ${saint}`);
+  }
+  assert.equal((html.match(/class="card-patronage"/g) ?? []).length, 10);
   assert.doesNotMatch(html, /What do the relic labels mean/);
   assert.doesNotMatch(html, /Relic available/);
   assert.doesNotMatch(html, /Nearly confirmed/);
@@ -181,7 +197,10 @@ test("keeps starter preview code and metadata out of the finished site", async (
   ]);
 
   assert.match(page, /SaintGallery/);
+  assert.doesNotMatch(page, /home-header|className="brand"|The Saints Chapel home/);
   assert.match(gallery, /saint-grid/);
+  assert.match(gallery, /card-patronage/);
+  assert.doesNotMatch(gallery, /useState|useMemo|search-wrap|saint-search|empty-state/);
   assert.match(layout, /The Saints Chapel/);
   assert.doesNotMatch(packageJson, /react-loading-skeleton/);
   assert.doesNotMatch(page, /_sites-preview|codex-preview/);

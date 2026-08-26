@@ -1,25 +1,10 @@
-"use client";
-
 import Image from "next/image";
 import Link from "next/link";
-import { useMemo, useState } from "react";
 import { saintDisplayName, saints } from "./saints";
 
 export default function SaintGallery() {
-  const [query, setQuery] = useState("");
-  const visibleSaints = useMemo(() => {
-    const term = query.trim().toLocaleLowerCase();
-    if (!term) return saints;
-
-    return saints.filter((saint) =>
-      [saint.name, saint.shortName, saint.epithet, saint.patronage].some((value) =>
-        value.toLocaleLowerCase().includes(term),
-      ),
-    );
-  }, [query]);
-
   return (
-    <section className="saint-finder" id="saints" aria-labelledby="gallery-title">
+    <section className="saint-gallery" id="saints" aria-labelledby="gallery-title">
       <div className="gallery-heading">
         <h1 id="gallery-title">The Saints Chapel</h1>
         <p>
@@ -28,29 +13,16 @@ export default function SaintGallery() {
         </p>
       </div>
 
-      <div className="search-wrap">
-        <label htmlFor="saint-search">Search the saints</label>
-        <input
-          id="saint-search"
-          type="search"
-          value={query}
-          onChange={(event) => setQuery(event.target.value)}
-          placeholder="Type a name or patronage"
-          autoComplete="off"
-        />
-        <span aria-live="polite">
-          {visibleSaints.length} {visibleSaints.length === 1 ? "saint" : "saints"}
-        </span>
-      </div>
+      <div className="saint-grid" aria-label="The Saints Chapel">
+        {saints.map((saint, index) => {
+          const displayName = saintDisplayName(saint);
 
-      {visibleSaints.length ? (
-        <div className="saint-grid" aria-label="The Saints Chapel">
-          {visibleSaints.map((saint, index) => (
+          return (
             <Link
               className="saint-card"
               href={`/saints/${saint.slug}`}
               key={saint.slug}
-              aria-label={`Meet ${saintDisplayName(saint)}`}
+              aria-label={`Meet ${displayName}. Patronage: ${saint.patronage}`}
             >
               <span className="portrait-ring">
                 <span className="card-image">
@@ -64,19 +36,13 @@ export default function SaintGallery() {
                 </span>
               </span>
               <span className="card-copy">
-                <span className="card-name">{saintDisplayName(saint)}</span>
+                <span className="card-name">{displayName}</span>
+                <span className="card-patronage">{saint.patronage}</span>
               </span>
             </Link>
-          ))}
-        </div>
-      ) : (
-        <div className="empty-state">
-          <h2>No saint found yet</h2>
-          <p>Try a first name such as Carlo, Maria or Thérèse.</p>
-          <button type="button" onClick={() => setQuery("")}>Show all saints</button>
-        </div>
-      )}
-
+          );
+        })}
+      </div>
     </section>
   );
 }

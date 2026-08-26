@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { chapelWebsiteLd, JsonLd } from "./json-ld";
 import SaintGallery from "./saint-gallery";
 
@@ -6,12 +5,6 @@ export default function Home() {
   return (
     <main className="exhibition-shell route-transition">
       <JsonLd data={chapelWebsiteLd()} />
-      <header className="site-header home-header">
-        <Link className="brand" href="/" aria-label="The Saints Chapel home">
-          The Saints Chapel
-        </Link>
-      </header>
-
       <SaintGallery />
 
       <section className="relic-teaching" aria-label="About relics">
