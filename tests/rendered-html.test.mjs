@@ -436,4 +436,6 @@ test("declares an app-native light shell and embedded viewport contract", async 
   assert.match(styles, /safe-area-inset-bottom/);
   assert.doesNotMatch(styles, /safe-area-inset-top/);
   assert.doesNotMatch(styles, /#[0]{3,6}\b|#[f]{3,6}\b/i);
+  assert.match(styles, /\.header-action\s*\{[^}]*color:\s*var\(--navy-deep\)/);
+  assert.match(styles, /\.gallery-action\s+\.header-action\s*\{[^}]*color:\s*white/);
 });

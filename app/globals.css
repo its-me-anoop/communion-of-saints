@@ -387,6 +387,10 @@ img {
   margin-top: 22px;
 }
 
+.gallery-action .header-action {
+  color: white;
+}
+
 .saint-grid {
   margin-top: 28px;
   display: grid;
@@ -841,6 +845,10 @@ img {
     background: var(--orange-pressed);
     color: var(--surface);
     transform: scale(0.98);
+  }
+
+  .gallery-action .header-action:hover {
+    color: white;
   }
 
   .prayer-source a:hover,
