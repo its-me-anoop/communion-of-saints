@@ -111,17 +111,28 @@ test("server-renders the exhibition saint gallery", async () => {
   assert.match(html, /The Saints Chapel/);
   assert.match(html, /Meet the saints/);
   assert.doesNotMatch(html, /Portraits, stories &amp; prayers|10(?:<!-- -->)? saints/);
-  assert.match(html, /aria-label="Chapel sections"/);
+  assert.doesNotMatch(html, /aria-label="Chapel sections"|chapel-tabs|chapel-tab/);
   assert.match(
     html,
-    /<a(?=[^>]*aria-current="page")(?=[^>]*href="\/")[^>]*>Saints<\/a>/,
+    /<a(?=[^>]*class="[^"]*header-action[^"]*")(?=[^>]*href="\/meditation")[^>]*>\s*Meditation\s*<\/a>/,
   );
-  assert.match(html, /href="\/meditation">Meditation<\/a>/);
   assert.match(html, /application\/ld\+json/);
   assert.match(html, /<link rel="canonical" href="https:\/\/communion-of-saints\.vercel\.app"\/>/);
   assert.match(html, /<meta property="og:url" content="https:\/\/communion-of-saints\.vercel\.app"\/>/);
   assert.match(html, /Since we are surrounded by so great a cloud of witnesses/);
   assert.match(html, /Hebrews 12:1/);
+  const homeText = htmlToText(html);
+  assertOrderedText(
+    homeText,
+    [
+      "The Saints Chapel",
+      "Meet the saints",
+      "Hebrews 12:1",
+      "Meditation",
+      "St. John Paul II",
+    ],
+    "Home gallery",
+  );
   assert.doesNotMatch(html, />\s*The communion of saints/i);
   assert.doesNotMatch(html, /Choose a saint/);
   assert.doesNotMatch(html, /Match the portrait beside the relic/);
@@ -195,11 +206,13 @@ test("server-renders the supplied Meditation and Litany of the Saints", async ()
     html,
     /<meta name="twitter:title" content="Meditation · The Saints Chapel"\/>/,
   );
-  assert.match(html, /aria-label="Chapel sections"/);
+  assert.doesNotMatch(html, /aria-label="Chapel sections"|chapel-tabs|chapel-tab/);
+  assert.match(html, /aria-label="Chapel navigation"/);
   assert.match(
     html,
-    /<a(?=[^>]*aria-current="page")(?=[^>]*href="\/meditation")[^>]*>Meditation<\/a>/,
+    /<a(?=[^>]*class="[^"]*back-link[^"]*")(?=[^>]*href="\/")(?=[^>]*aria-label="Back to all saints")[^>]*>/,
   );
+  assert.match(html, /All saints/);
   assert.match(html, /Jesus Youth Jubilee Conference 2026/i);
   assert.match(html, /Ephesians 3:14–19/);
   assert.match(html, /With all the saints…/);
@@ -369,14 +382,17 @@ test("keeps starter preview code and metadata out of the finished site", async (
   ]);
 
   assert.match(page, /SaintGallery/);
-  assert.doesNotMatch(page, /home-header|className="brand"|The Saints Chapel home/);
+  assert.doesNotMatch(page, /home-header|className="brand"|The Saints Chapel home|ChapelTabs/);
   assert.match(gallery, /saint-grid/);
   assert.match(gallery, /card-patronage/);
+  assert.match(gallery, /header-action/);
+  assert.match(gallery, /href="\/meditation"/);
   assert.doesNotMatch(gallery, /useState|useMemo|search-wrap|saint-search|empty-state/);
   assert.match(layout, /The Saints Chapel/);
   assert.doesNotMatch(packageJson, /react-loading-skeleton/);
   assert.doesNotMatch(page, /_sites-preview|codex-preview/);
   await assert.rejects(access(new URL("../app/_sites-preview", import.meta.url)));
+  await assert.rejects(access(new URL("../app/chapel-tabs.tsx", import.meta.url)));
 });
 
 test("uses calm route motion with a reduced-motion fallback", async () => {

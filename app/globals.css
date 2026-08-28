@@ -133,53 +133,6 @@ img {
   }
 }
 
-/* Chapel sections */
-.chapel-tabs {
-  width: min(calc(100% - 32px), 1120px);
-  margin: 0 auto;
-  padding-top: 10px;
-  display: flex;
-  gap: 24px;
-  border-bottom: 1px solid var(--line);
-}
-
-.chapel-tab {
-  position: relative;
-  min-height: 44px;
-  display: inline-flex;
-  align-items: center;
-  color: var(--navy-soft);
-  font-size: 0.9rem;
-  font-weight: 750;
-  line-height: 1.2;
-  transition: color var(--motion-fast) var(--ease-chapel);
-}
-
-.chapel-tab::after {
-  position: absolute;
-  right: 0;
-  bottom: -1px;
-  left: 0;
-  height: 3px;
-  border-radius: 999px 999px 0 0;
-  background: var(--orange-pressed);
-  content: "";
-  opacity: 0;
-  transform: scaleX(0.55);
-  transform-origin: center;
-  transition: opacity var(--motion-fast) var(--ease-chapel),
-    transform var(--motion-fast) var(--ease-chapel);
-}
-
-.chapel-tab[aria-current="page"] {
-  color: var(--navy-deep);
-}
-
-.chapel-tab[aria-current="page"]::after {
-  opacity: 1;
-  transform: scaleX(1);
-}
-
 .meditation-content {
   width: min(calc(100% - 32px), 1120px);
   margin: 0 auto;
@@ -382,10 +335,6 @@ img {
   scroll-margin-top: 16px;
 }
 
-.chapel-tabs + .saint-gallery {
-  padding-top: 22px;
-}
-
 .gallery-heading {
   max-width: 46rem;
 }
@@ -432,6 +381,10 @@ img {
   letter-spacing: 0.09em;
   line-height: 1.35;
   text-transform: uppercase;
+}
+
+.gallery-action {
+  margin-top: 22px;
 }
 
 .saint-grid {
@@ -861,7 +814,6 @@ img {
 }
 
 @media (hover: none), (pointer: coarse) {
-  .chapel-tab,
   .saint-card,
   .back-link,
   .header-action,
@@ -873,10 +825,6 @@ img {
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .chapel-tab:hover {
-    color: var(--navy-deep);
-  }
-
   .saint-card:hover {
     transform: translateY(-3px);
   }
@@ -906,7 +854,6 @@ img {
 }
 
 @media (min-width: 640px) {
-  .chapel-tabs,
   .meditation-content,
   .saint-gallery,
   .relic-teaching,
@@ -919,14 +866,6 @@ img {
 
   .saint-gallery {
     padding-block: 42px 40px;
-  }
-
-  .chapel-tabs {
-    padding-top: 14px;
-  }
-
-  .chapel-tabs + .saint-gallery {
-    padding-top: 30px;
   }
 
   .meditation-content {
@@ -1019,7 +958,6 @@ img {
 }
 
 @media (max-width: 359px) {
-  .chapel-tabs,
   .meditation-content,
   .saint-gallery,
   .relic-teaching,

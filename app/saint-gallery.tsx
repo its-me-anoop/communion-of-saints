@@ -14,6 +14,12 @@ export default function SaintGallery() {
         </p>
       </div>
 
+      <div className="gallery-action">
+        <Link className="header-action" href="/meditation">
+          Meditation
+        </Link>
+      </div>
+
       <div className="saint-grid" aria-label="The Saints Chapel">
         {saints.map((saint, index) => {
           const displayName = saintDisplayName(saint);

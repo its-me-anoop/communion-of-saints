@@ -1,12 +1,10 @@
 import { chapelWebsiteLd, JsonLd } from "./json-ld";
-import ChapelTabs from "./chapel-tabs";
 import SaintGallery from "./saint-gallery";
 
 export default function Home() {
   return (
     <main className="exhibition-shell route-transition">
       <JsonLd data={chapelWebsiteLd()} />
-      <ChapelTabs active="saints" />
       <SaintGallery />
 
       <section className="relic-teaching" aria-label="About relics">

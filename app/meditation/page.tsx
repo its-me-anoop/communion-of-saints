@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import ChapelTabs from "../chapel-tabs";
+import Link from "next/link";
 
 const litany = [
   "Holy Mary, Mother of God",
@@ -111,7 +111,12 @@ export const metadata: Metadata = {
 export default function MeditationPage() {
   return (
     <main className="exhibition-shell route-transition">
-      <ChapelTabs active="meditation" />
+      <nav className="site-header saint-header" aria-label="Chapel navigation">
+        <Link className="back-link" href="/" aria-label="Back to all saints">
+          <span aria-hidden="true">‹</span>
+          All saints
+        </Link>
+      </nav>
 
       <article className="meditation-content">
         <header className="meditation-heading">
