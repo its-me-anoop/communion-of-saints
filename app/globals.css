@@ -565,7 +565,7 @@ img {
   border: 1px solid var(--orange-pressed);
   border-radius: 999px;
   background: var(--orange);
-  color: var(--navy-deep);
+  color: white;
 }
 
 .back-link:active,
@@ -843,7 +843,7 @@ img {
 
   .header-action:hover {
     background: var(--orange-pressed);
-    color: var(--surface);
+    color: white;
     transform: scale(0.98);
   }
 
