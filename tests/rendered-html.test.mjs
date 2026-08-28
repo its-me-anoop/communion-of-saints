@@ -200,16 +200,19 @@ test("server-renders the supplied Meditation and Litany of the Saints", async ()
     html,
     /<a(?=[^>]*aria-current="page")(?=[^>]*href="\/meditation")[^>]*>Meditation<\/a>/,
   );
-  assert.match(html, /Jesus Youth Silver Jubilee 2026/i);
-  assert.match(html, /Ephesians 3:18–19/);
+  assert.match(html, /Jesus Youth Jubilee Conference 2026/i);
+  assert.match(html, /Ephesians 3:14–19/);
   assert.match(html, /With all the saints…/);
   assert.match(html, /What depth of love for Christ/);
+  assert.match(html, /Karol Wojtyła/);
+  assert.match(html, /the Praying Mother/);
   assert.match(html, /Litany of the Saints/);
   assert.match(html, /Holy Mary, Mother of God/);
   assert.match(html, /St Euphrasia Eluvathingal/);
   assert.match(html, /May we, with all the saints/);
   assert.doesNotMatch(html, /noindex|content will be added here/i);
   assert.doesNotMatch(html, /saint-grid|relic-teaching/);
+  assert.doesNotMatch(html, /Silver Jubilee|Ephesians 3:18|surrounded by the relics/i);
 
   const articleHtml = html.match(
     /<article class="meditation-content">([\s\S]*?)<\/article>/,
@@ -221,38 +224,62 @@ test("server-renders the supplied Meditation and Litany of the Saints", async ()
     articleText,
     [
       "The Saints Chapel",
-      "Jesus Youth Silver Jubilee 2026",
+      "Jesus Youth Jubilee Conference 2026",
       "Meditation",
-      "“That you may have the power to comprehend, with all the saints, what is the breadth and length and height and depth, and to know the love of Christ that surpasses knowledge, so that you may be filled with all the fullness of God.”",
-      "Ephesians 3:18–19",
+      "Pause and reflect",
+      "What depth of love for Christ would lead these saints to give Him everything — even their lives?",
+      "What did they discover in Jesus that made everything else seem small?",
       "With all the saints…",
       "Take a moment and become still.",
       "Slow down. Quiet your heart. Become aware of where you are.",
-      "You are surrounded by the relics of men and women who loved Jesus.",
+      "You are surrounded by the presence of men and women who loved Jesus.",
       "They walked this earth as we do.",
       "They knew joy and sorrow, weakness and temptation, suffering and sacrifice.",
       "Yet they allowed the love of Christ to transform their lives.",
       "Their earthly lives have ended, but they are alive in Christ.",
       "In the stillness of this chapel, allow yourself to experience the Communion of Saints — the aroma of holiness that surrounds you, and the witness of lives completely surrendered to God.",
-      "Pause and reflect",
-      "What depth of love for Christ would lead these saints to give Him everything — even their lives?",
-      "What did they discover in Jesus that made everything else seem small?",
-      "And now, think of God the Father’s love for you.",
+      "“For this reason I bow my knees before the Father, from whom every family in heaven and on earth takes its name. I pray that, according to the riches of his glory, he may grant that you may be strengthened in your inner being with power through his Spirit, and that Christ may dwell in your hearts through faith, as you are being rooted and grounded in love. I pray that you may have the power to comprehend, what is the breadth and length and height and depth, and to know the love of Christ that surpasses knowledge, so that you may be filled with all the fullness of God.”",
+      "Ephesians 3:14–19",
+      "With all the Saints",
+      "St John Paul II",
+      "an ordinary Polish priest, Karol Wojtyła, who went on to change the course of the world.",
+      "St John Vianney",
+      "a simple priest who found his deepest calling in a life spent in the confessional.",
+      "St Carlo Acutis",
+      "a young teenager of the digital age who found more joy in the Eucharist than in the internet.",
+      "Sts Jacinta and Francisco",
+      "two very young children who understood the call to prayer and penance for the conversion of the world.",
+      "St Alphonsa",
+      "a young girl from a remote village in Kerala, willing even to walk on burning embers rather than give up her call to religious life.",
+      "St Maria Goretti",
+      "a young girl, newly admitted to Confession and Holy Communion, who would choose death rather than sin.",
+      "St Thérèse of Lisieux",
+      "a young French girl, formed in the holiness of her family, who desired to become ever smaller so that she might draw ever closer to Jesus.",
+      "St Padre Pio",
+      "a simple priest whose holiness and simplicity of life drew the world to him.",
+      "St Augustine",
+      "a young man who left behind the pleasures of the world when he discovered the true joy of knowing God.",
+      "St Euphrasia",
+      "an unassuming nun from a village in Kerala who spent her life before the Eucharist, becoming known simply as “the Praying Mother.” What did she see in the Eucharist?",
+      "Stay here for a moment.",
       "The same God who called them to holiness calls you.",
       "The same Christ whom they loved loves you.",
       "Can you begin to comprehend",
       "the breadth and length,",
       "the height and depth",
       "of His love for you?",
-      "Stay here for a moment.",
-      "Let yourself be loved by God.",
       "Then look around you at these witnesses of that Love.",
       "Bring to them the intentions you carry in your heart and ask them to pray with you and for you.",
+      "Let yourself be loved by God.",
       "Litany of the Saints",
       "May we, with all the saints, come to know the love of Christ that surpasses knowledge and be filled with all the fullness of God. Amen.",
     ],
     "Meditation content",
   );
+
+  const witnessHtml = html.match(/<ul class="saint-witness-list">([\s\S]*?)<\/ul>/)?.[1];
+  assert.ok(witnessHtml, "expected the saint witness list");
+  assert.equal((witnessHtml.match(/<li>/g) ?? []).length, 10);
 
   const litanyHtml = html.match(/<ul class="litany-list">([\s\S]*?)<\/ul>/)?.[1];
   assert.ok(litanyHtml, "expected the Litany of the Saints list");

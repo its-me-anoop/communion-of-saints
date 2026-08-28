@@ -215,7 +215,7 @@ img {
 
 .meditation-scripture {
   max-width: 58rem;
-  margin: 0;
+  margin: 42px 0 0;
   padding: 24px 20px;
   border: 1px solid var(--line);
   border-radius: 20px;
@@ -305,6 +305,32 @@ img {
 .love-measure span,
 .love-measure strong {
   display: block;
+}
+
+.saint-witness-list {
+  margin: 0 0 28px;
+  padding: 0;
+  border-top: 1px solid var(--line);
+  list-style: none;
+}
+
+.saint-witness-list li {
+  padding: 16px 0;
+  display: grid;
+  gap: 6px;
+  border-bottom: 1px solid var(--line);
+}
+
+.saint-witness-list strong {
+  color: var(--navy-deep);
+  font-weight: 750;
+  line-height: 1.35;
+}
+
+.saint-witness-list span {
+  color: var(--navy-soft);
+  font-size: 0.98rem;
+  line-height: 1.55;
 }
 
 .litany-list {
